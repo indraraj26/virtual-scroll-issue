@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>modal</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="data !== 1; else no">
+  <ion-list [virtualScroll]="country">
+    <ion-item *virtualItem="let item">
+        <button ion-item (click)="dimiss(item)">
+            {{item.name}}
+          </button>
+    </ion-item>
+  </ion-list>
+</div>
+ <ng-template #no>
+   <button ion-item (click)="dimiss(item)">no data</button>
+ </ng-template>
+</ion-content>
