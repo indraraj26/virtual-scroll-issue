@@ -9,16 +9,18 @@ import { DataStorageProvider } from '../../providers/data-storage/data-storage';
 })
 export class HomePage {
   public countries: any[] = [];
+  public industries: any[] = [];
   constructor(public modalCtrl: ModalController, private data:DataStorageProvider) {
 
   }
 
   ionViewDidLoad(){
     this.countries = this.data.getCountrylist();
+    this.industries = this.data.getIndustrylist();
   }
 
-  OpenModal(noData?:number) {
-    let modal = this.modalCtrl.create(ModalPage, {'country': this.countries, "noData": noData});
+  OpenModal(check:number) {
+    let modal = this.modalCtrl.create(ModalPage, {'country': this.countries, "industry": this.industries, "check": check});
     modal.onDidDismiss((data) => {
       console.log(data);
     })

@@ -1,20 +1,64 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>modal</ion-title>
-  </ion-navbar>
+  <ion-toolbar [hidden]="check !== 1">
+    <ion-buttons left>
+        <button ion-button icon-only (click)="dismiss()">
+          <ion-icon color="primary" name="md-arrow-back"></ion-icon>
+        </button>
+      </ion-buttons>
+    <ion-input  #countryInput [(ngModel)]="countryListFilter.name" placeholder="Search Country Name" clearInput="true"></ion-input>
+    <ion-buttons right>
+        <button class="cbar-btn" ion-button icon-only (click)="dismiss()">
+          <ion-icon color="primary" name="close"></ion-icon>
+        </button>
+      </ion-buttons>
+</ion-toolbar>
+<ion-toolbar [hidden]="check !== 2">
+  <ion-buttons left>
+     <button ion-button icon-only (click)="dismiss()">
+       <ion-icon color="primary" name="md-arrow-back"></ion-icon>
+     </button>
+   </ion-buttons>
+   <ion-input #industryInput [(ngModel)]="industryFilter.name" placeholder="Search Industry" clearInput="true"></ion-input>
+   <ion-buttons right>
+     <button  ion-button icon-only (click)="dismiss()">
+       <ion-icon color="primary" name="close"></ion-icon>
+     </button>
+   </ion-buttons>
+ </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <div *ngIf="data !== 1; else no">
-  <ion-list [virtualScroll]="country">
-    <ion-item *virtualItem="let item">
-        <button ion-item (click)="dimiss(item)">
-            {{item.name}}
-          </button>
-    </ion-item>
-  </ion-list>
-</div>
- <ng-template #no>
-   <button ion-item (click)="dimiss(item)">no data</button>
- </ng-template>
+<ion-content class="outer-content">
+    <div style="height:100%" *ngIf="check == 1">
+     <ion-list no-lines [virtualScroll]="countryList | filterBy: countryListFilter" approxItemHeight="50px">
+         <button ion-item *virtualItem="let con" (tap)="uSelected(con)">
+             <span style="text-transform: capitalize">{{con.name}}</span>
+         </button>
+         <button ion-item *ngIf="(countryList | filterBy: countryListFilter).length === 0">
+                 <span style="text-transform: capitalize">No data found</span>
+         </button>
+     </ion-list>
+   </div>
+
+   <div style="height:100%" *ngIf="check === 2">
+    <ng-container *ngIf="(industryList?.length != 0); else noInudstry">
+     <ion-list no-lines [virtualScroll]="industryList | filterBy: industryFilter" approxItemHeight="45px">
+         <div *virtualItem="let industry" style="width:100%">
+           <button ion-item *ngIf="industry.sub_industires" style="background-color:lightgray; margin-bottom:2px">
+             <span style="font-weight:bold">{{industry.name}}</span>
+           </button>
+               <button ion-item *ngIf="!industry.sub_industires" (tap)="onClickUser(industry)">
+                 <span style="margin-left:10px">{{industry.name}}</span>
+               </button>
+       </div>
+       <button ion-item *ngIf="(industryList | filterBy: industryFilter).length === 0">
+           <span class="user-name">No data found</span>
+    </button>
+       </ion-list>
+     </ng-container>
+     <ng-template #noInudstry>
+         <button ion-item>
+           <span style="font-weight:bold">No Data Found</span>
+         </button>
+       </ng-template>
+ </div>
 </ion-content>
